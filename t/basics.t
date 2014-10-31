@@ -1,4 +1,4 @@
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Text::BlockLayout;
 
 my $tb = Text::BlockLayout->new(
@@ -35,3 +35,13 @@ $tb = Text::BlockLayout->new(
 
 $tb->add_text('012345 7890');
 is $tb->formatted, "012345\n7890\n", 'Text with width 1 + max_wdith is wrapped';
+
+$tb = Text::BlockLayout->new(
+    max_width   => 37,
+    separator   => '; ',
+);
+$tb->add_line('abc');
+$tb->add_text('def');
+
+is $tb->formatted, "abc\ndef\n", 'add_line + add_text';
+
