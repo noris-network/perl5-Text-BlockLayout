@@ -37,6 +37,11 @@ has wrapper    => (
     },
 );
 
+has wrap_predefined_lines => (
+    is          => 'rw',
+    default     => sub { 1 },
+);
+
 sub add_text {
     my ($self, @chunks) = @_;
 
@@ -62,7 +67,12 @@ sub formatted {
            $start_new_line ||= length($lines[-1]) > $self->line_continuation_threshold;
            $start_new_line ||= (length($lines[-1]) + length($self->separator) + length $text) > $self->max_width;
         if ($start_new_line) {
-            push @lines, split /\n/, $self->wrapper->($self->max_width, $text);
+            if (!$separate_line || $self->wrap_predefined_lines) {
+                push @lines, split /\n/, $self->wrapper->($self->max_width, $text);
+            }
+            else {
+                push @lines, split /\n/, $text;
+            }
         }
         else {
             $lines[-1] .= $self->separator . $text;
@@ -138,8 +148,16 @@ integer.
 =head2 wrapper
 
 A callback that receives the C<max_width> and text to be wrapped as arguments,
-and must return a wrapped string. Defaults to a L<Text::Wrapper>-based
-wrapper.
+and must return a wrapped string.
+
+Optional. Defaults to a L<Text::Wrapper>-based wrapper.
+
+=head2 wrap_predefined_lines
+
+If set to a false value, text added with C<add_line> will not be line-wrapped.
+
+Optional. Defaults to C<True>.
+
 
 =head1 Methods
 

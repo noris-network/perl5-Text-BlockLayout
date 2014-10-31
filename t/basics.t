@@ -1,4 +1,4 @@
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Text::BlockLayout;
 
 my $tb = Text::BlockLayout->new(
@@ -44,4 +44,12 @@ $tb->add_line('abc');
 $tb->add_text('def');
 
 is $tb->formatted, "abc\ndef\n", 'add_line + add_text';
+
+$tb = Text::BlockLayout->new(
+    max_width                   => 5,
+    wrap_predefined_lines       => 0,
+);
+$tb->add_line('bla bla');
+
+is $tb->formatted, "bla bla\n", 'wrap_predefined_lines';
 
