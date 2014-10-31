@@ -1,3 +1,9 @@
+libtext-blocklayout-perl (0.02) wheezy; urgency=medium
+
+  * new upstream version that fixes off-by-one errors
+
+ -- Moritz Lenz <mlenz@noris.net>  Fri, 31 Oct 2014 10:42:53 +0100
+
 libtext-blocklayout-perl (0.01-1) wheezy; urgency=low
 
   * Initial Release.
