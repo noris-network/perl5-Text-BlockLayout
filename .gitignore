@@ -13,3 +13,5 @@ Text-BlockLayout-*
 *.swp
 MYMETA.*
 MANIFEST*
+debian/files
+debian/libtext-blocklayout-perl*
