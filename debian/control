@@ -1,0 +1,22 @@
+Source: libtext-blocklayout-perl
+Section: perl
+Priority: optional
+Maintainer: Moritz Lenz <mlenz@noris.net>
+Build-Depends: debhelper (>= 9)
+Build-Depends-Indep: libmoo-perl (>= 0.091011),
+ perl
+Standards-Version: 3.9.5
+Homepage: https://metacpan.org/release/Text-BlockLayout
+
+Package: libtext-blocklayout-perl
+Architecture: all
+Depends: ${misc:Depends}, ${perl:Depends},
+ libmoo-perl (>= 0.091011)
+Description: Generate text blocks from a mixture of wrappable and
+ Text::BlockLayout can wrap and format chunks of text for you. For each piece
+ of text you add, you can chose whether it remains on lines on its own (when
+ added with the add_line method), or whether it might be joined with other
+ lines (when added with the add_text method). If the latter is the case, the
+ pieces of text are joined by a customizable separator.
+ .
+ This description was automagically extracted from the module by dh-make-perl.
