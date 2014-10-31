@@ -6,7 +6,7 @@ use warnings;
 use utf8;
 use Text::Wrap ();
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Moo;
 
@@ -62,7 +62,8 @@ sub formatted {
 
 sub _wrap {
     my ($self, $text) = @_;
-    local $Text::Wrap::columns = $self->max_width;
+    # it seems Text::Wrap includes the final newline, so +1
+    local $Text::Wrap::columns = 1 + $self->max_width;
     return split /\n/, Text::Wrap::wrap('', '', $text);
 }
 

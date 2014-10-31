@@ -1,4 +1,4 @@
-use Test::More tests => 1;
+use Test::More tests => 3;
 use Text::BlockLayout;
 
 my $tb = Text::BlockLayout->new(
@@ -17,3 +17,21 @@ This is longer than
 Short.
 Another.
 EXPECTED
+
+# test off-by-one errors:
+
+$tb = Text::BlockLayout->new(
+    max_width   => 10,
+    separator   => '.',
+);
+
+$tb->add_text('012345 789');
+is $tb->formatted, "012345 789\n", 'Text with exactly max width is not wrapped';
+
+$tb = Text::BlockLayout->new(
+    max_width   => 10,
+    separator   => '.',
+);
+
+$tb->add_text('012345 7890');
+is $tb->formatted, "012345\n7890\n", 'Text with width 1 + max_wdith is wrapped';
