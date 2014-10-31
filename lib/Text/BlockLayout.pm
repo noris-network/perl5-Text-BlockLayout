@@ -4,9 +4,8 @@ use 5.010;
 use strict;
 use warnings;
 use utf8;
-use Text::Wrap ();
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use Moo;
 
@@ -23,6 +22,24 @@ has line_continuation_threshold => (
 has separator => (
     is      => 'rw',
     default => sub { ' ' },
+);
+
+has wrapper    => (
+    is       => 'rw',
+    lazy        => 1,
+    default  => sub {
+        return sub {
+            my ($max_width, $text) = @_;
+            require Text::Wrapper;
+            my $wrapper = Text::Wrapper->new(columns => $max_width);
+            $wrapper->wrap($text);
+        };
+    },
+);
+
+has wrap_predefined_lines => (
+    is          => 'rw',
+    default     => sub { 1 },
 );
 
 sub add_text {
@@ -50,7 +67,12 @@ sub formatted {
            $start_new_line ||= length($lines[-1]) > $self->line_continuation_threshold;
            $start_new_line ||= (length($lines[-1]) + length($self->separator) + length $text) > $self->max_width;
         if ($start_new_line) {
-            push @lines, $self->_wrap($text);
+            if (!$separate_line || $self->wrap_predefined_lines) {
+                push @lines, split /\n/, $self->wrapper->($self->max_width, $text);
+            }
+            else {
+                push @lines, split /\n/, $text;
+            }
         }
         else {
             $lines[-1] .= $self->separator . $text;
@@ -60,12 +82,6 @@ sub formatted {
     return join "\n", @lines, '';
 }
 
-sub _wrap {
-    my ($self, $text) = @_;
-    # it seems Text::Wrap includes the final newline, so +1
-    local $Text::Wrap::columns = 1 + $self->max_width;
-    return split /\n/, Text::Wrap::wrap('', '', $text);
-}
 
 1;
 
@@ -128,6 +144,20 @@ chunks of text will be added to this line.
 
 Optional. Defaults to two thirds of C<max_width>, rounded to the nearest
 integer.
+
+=head2 wrapper
+
+A callback that receives the C<max_width> and text to be wrapped as arguments,
+and must return a wrapped string.
+
+Optional. Defaults to a L<Text::Wrapper>-based wrapper.
+
+=head2 wrap_predefined_lines
+
+If set to a false value, text added with C<add_line> will not be line-wrapped.
+
+Optional. Defaults to C<True>.
+
 
 =head1 Methods
 
