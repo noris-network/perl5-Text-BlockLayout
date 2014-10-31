@@ -18,7 +18,7 @@ WriteMakefile(
     PL_FILES            => {},
     PREREQ_PM => {
         'Test::More'    => 0,
-        'Text::Wrap'    => 0,
+        'Text::Wrapper' => 0,
         Moo             => 0.091011,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
